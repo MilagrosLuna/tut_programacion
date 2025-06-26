@@ -8,6 +8,12 @@
 
 ---
 
+## Carrera
+Tecnicatura Universitaria en Telecomunicaciones (TUT)
+
+## Materia
+PROGRAMACIÓN
+
 ## 📌 Descripción General
 
 Este proyecto contiene una serie de ejercicios realizados utilizando **PSeInt**, orientados a reforzar la lógica de programación y el uso de estructuras básicas como condicionales, ciclos, operaciones matemáticas y manejo de cadenas.

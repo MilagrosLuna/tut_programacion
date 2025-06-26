@@ -1,12 +1,17 @@
-// Pirámide 
-// El usuario debe ingresar un número y genera una pirámide de números hasta llegar al número. 
-// Cada número es una fila.
+// Pirï¿½mide 
+// El usuario debe ingresar un nï¿½mero y genera una pirï¿½mide de nï¿½meros hasta llegar al nï¿½mero. 
+// Cada nï¿½mero es una fila.
 
 Algoritmo Piramide
     Definir numMaximo Como Entero
-    Definir fila, numCaracteres, espacios Como Entero
+    Definir fila, numRepeticiones, espaciosInicio Como Entero
+    Definir i, j Como Entero // Variables de control para bucles
 	
-	//Bucle para la comprobacion de numero ingresado
+    Definir anchoCelda, anchoTotalBase Como Entero
+    Definir espacioEntreNumeros Como Entero // Nuevo: Define un espacio extra
+    espacioEntreNumeros = 1  // Podemos ajustar este valor si queremos mï¿½s o menos espacio
+	
+    // Bucle para la comprobacion de numero ingresado
     Repetir
         Escribir "Ingrese un numero entero positivo para la cima de la piramide (ej. 5)"
         Leer numMaximo
@@ -14,43 +19,80 @@ Algoritmo Piramide
         Si numMaximo <= 0 Entonces
             Escribir "El numero debe ser mayor que cero."
         FinSi
-    Hasta Que numMaximo > 0 
+    Hasta Que numMaximo > 0
 	
-	// Bucle para cada fila, desde el numeroMaximo hasta 1
+    // --- PASO 1: Calcular el ancho de la celda ---
+    Si numMaximo = 0 Entonces
+        anchoCelda = 1
+    Sino
+        anchoCelda = 0
+        tempNum = numMaximo
+        Mientras tempNum > 0 Hacer
+            tempNum = trunc(tempNum / 10)
+            anchoCelda = anchoCelda + 2
+        FinMientras
+    FinSi
+	
+    // --- PASO 2: Calcular el ancho total que tendrï¿½ la base de la pirï¿½mide ---
+    // Ahora, el ancho de cada "elemento" en la base es anchoCelda + ESPACIO_ENTRE_NUMEROS.
+    // Solo se aï¿½ade el espacio si no es el ï¿½ltimo nï¿½mero de la fila.
+    // El nï¿½mero de "slots" es (2 * numMaximo - 1).
+    // El ancho de la base serï¿½: (numRepeticiones de la base * anchoCelda) + (numRepeticiones de la base - 1 * espacioEntreNumeros)
+    anchoTotalBase = (2 * numMaximo - 1) * (anchoCelda + espacioEntreNumeros) - espacioEntreNumeros 
+	
+    // Bucle principal para cada fila, desde numMaximo hasta 1
     Para fila = numMaximo Hasta 1 Con Paso -1 Hacer
-        // Cálculo de 'numCaracteres':
-        // Determina cuántos números se deben imprimir en la fila actual.
-        // La primera fila (fila = numMaximo) tiene 1 caracter.
-        // La segunda fila (fila = numMaximo - 1) tiene 3 caracteres.
-        // La fórmula general para una pirámide que se expande en 2 caracteres por fila es:
-        // numCaracteres = 2 * (numMaximo - fila) + 1
-        numCaracteres = 2 * (numMaximo - fila) + 1
+        // Calcular cuï¿½ntos nï¿½meros de la 'fila' actual se deben imprimir en esta lï¿½nea.
+        numRepeticiones = 2 * (numMaximo - fila) + 1
 		
-        // Cálculo de 'espacios':
-        // Determina la cantidad de espacios necesarios al inicio de cada fila para centrarla.
-        // El número total de caracteres de la base (cuando fila = 1) es: 2 * (numMaximo - 1) + 1.
-        // Para centrar, se resta la cantidad de caracteres de la fila actual del total de caracteres de la base,
-        // y se divide entre 2.
-        // Por ejemplo, si numMaximo es 3:
-        // Base (fila=1): numCaracteres = 2*(3-1)+1 = 5.
-        // Para la primera fila (fila=3), numCaracteres = 1. Espacios = (5 - 1) / 2 = 2.
-        // Para la segunda fila (fila=2), numCaracteres = 3. Espacios = (5 - 3) / 2 = 1.
-        // Para la tercera fila (fila=1), numCaracteres = 5. Espacios = (5 - 5) / 2 = 0.
-        espacios = ((2 * (numMaximo - 1) + 1) - numCaracteres) / 2
+        // --- CALCULO DEL ANCHO DE LA FILA ACTUAL ---
+        // Considera el ancho de cada nï¿½mero y el espacio entre ellos.
+        // Similar al anchoTotalBase, pero para la fila actual.
+        anchoFilaActual = (numRepeticiones * (anchoCelda + espacioEntreNumeros)) - espacioEntreNumeros // Resta el ï¿½ltimo espacio
 		
-        // Impresión de los espacios iniciales para centrar la fila.
-        Si espacios > 0 Entonces
-            Para i = 1 Hasta espacios Hacer
-                Escribir " " Sin Saltar 
-            FinPara
-        FinSi
+        // --- CALCULO DE LOS ESPACIOS INICIALES PARA CENTRAR ---
+        espaciosInicio = (anchoTotalBase - anchoFilaActual) / 2
 		
-        // Impresión de los números para la fila actual.
-        Para i = 1 Hasta numCaracteres Hacer
-            Escribir fila Sin Saltar 
+        // Impresiï¿½n de los espacios iniciales para centrar la fila.
+        Para i = 1 Hasta espaciosInicio Hacer
+            Escribir " " Sin Saltar
         FinPara
 		
-        Escribir "" // Salto de línea al final de cada fila para pasar a la siguiente
-    FinPara 
-	
+        // Impresiï¿½n de los nï¿½meros para la fila actual.
+        Para i = 1 Hasta numRepeticiones Hacer
+            // --- SIMULACIï¿½N DE FORMATO DE Nï¿½MERO PARA PSeInt ---
+            // Calcular el ancho del nï¿½mero de la fila actual.
+            Si fila = 0 Entonces
+                anchoNumeroActual = 1
+            Sino
+                anchoNumeroActual = 0
+                tempNum = fila
+                Mientras tempNum > 0 Hacer
+                    tempNum = trunc(tempNum / 10)
+                    anchoNumeroActual = anchoNumeroActual + 1
+                FinMientras
+            FinSi
+			
+            // Calcular cuï¿½ntos espacios de relleno necesitamos ANTES de imprimir el nï¿½mero.
+            espaciosRelleno = anchoCelda - anchoNumeroActual
+			
+            // Imprimir los espacios de relleno.
+            Para j = 1 Hasta espaciosRelleno Hacer
+                Escribir " " Sin Saltar
+            FinPara
+			
+            // Imprimir el nï¿½mero de la fila.
+            Escribir fila Sin Saltar
+			
+            // Aï¿½ADIR ESPACIO ADICIONAL ENTRE LOS Nï¿½MEROS (EXCEPTO EL ï¿½LTIMO)
+            Si i < numRepeticiones Entonces
+                Para j = 1 Hasta ESPACIO_ENTRE_NUMEROS Hacer
+                    Escribir " " Sin Saltar
+                FinPara
+            FinSi
+        FinPara
+		
+        Escribir "" // Salto de lï¿½nea al final de cada fila para pasar a la siguiente
+    FinPara
+
 FinAlgoritmo
